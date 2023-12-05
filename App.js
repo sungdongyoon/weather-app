@@ -1,11 +1,22 @@
 import { View, Text, StyleSheet, ScrollView, Dimensions, ActivityIndicator } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect, useState } from 'react';
+import { Fontisto } from '@expo/vector-icons'; 
 import * as Location from 'expo-location';
 
 const {width: SCREEN_WIDTH} = Dimensions.get("window");
 
 const API_KEY = 'e948880ae1e5d9700d068bfc6fce5c65';
+
+const icons = {
+  Clouds: "cloudy",
+  Rain: "rains",
+  Clear: "day-sunny",
+  Atomsphere: "cloudy-gusts",
+  Snow: "snow",
+  Drizzle: "rain",
+  Thunderstorm: "lightning",
+}
 
 export default function App() {
   const [city, setCity] = useState("Loading...");
@@ -42,7 +53,10 @@ export default function App() {
           days.map((weather, index) => (
             <View key={index} style={styles.day}>
               <Text style={styles.date}>{weather.dt_txt}</Text>
-              <Text style={styles.temp}>{Number(weather.main.temp).toFixed(1)}℃</Text>
+              <View style={{flexDirection: "row", alignItems: "center", justifyContent: "space-between"}}>
+                <Text style={styles.temp}>{Number(weather.main.temp).toFixed(1)}℃</Text>
+                <Fontisto name={icons[weather.weather[0].main]} size={60} color="black"/>
+              </View>
               <Text style={styles.description}>{weather.weather[0].main}</Text>
             </View>
           ))
@@ -72,7 +86,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   temp: {
-    fontSize: 150,
+    fontSize: 100,
     marginTop: 50,
   },
   description: {
