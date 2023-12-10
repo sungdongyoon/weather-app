@@ -50,17 +50,19 @@ export default function App() {
     console.log(currentWeather);
   }, [])
 
+  const coutnDate = ["내일", "모레", "글피", "그글피", "닷새뒤"];
+
   return (
-    <LinearGradient colors={["#f6d365", "#fda085"]} style={styles.container}>
+    <LinearGradient colors={["#DDE3EA", "#ddd"]} style={styles.container}>
       <View style={styles.city}>
-        <Text style={styles.title}>주간 날씨</Text>
         <Text style={styles.cityName}>{city}</Text>
       </View>
       <View style={styles.current}>
-        <Text style={styles.currentTitle}>현재 날씨</Text>
-        <Text>아이콘</Text>
-        <Text style={styles.currentTemp}>{currentWeather.main.temp}°</Text>
-        <Text style={styles.currentDesc}>Rainy</Text>
+        <Text style={styles.currentTemp}>{currentWeather.weather[0].description}</Text>
+        <View style={styles.currentWeatherInfo}>
+          <Text style={styles.currentTemp}>{currentWeather.main?.temp}℃</Text>
+          <Text style={styles.currentDesc}>{currentWeather.weather[0].description}</Text>
+        </View>
       </View>
       <ScrollView horizontal pagingEnabled indicatorStyle='white' contentContainerStyle={styles.weather}>
         {days.length === 0 ?
@@ -69,10 +71,13 @@ export default function App() {
           </View> :
           days.map((weather, index) => (
             <View key={index} style={styles.day}>
+              <View style={styles.dateWrap}>
+                <Text style={styles.countDate}>{coutnDate[index]}</Text>
+                <Text style={styles.date}>{weather.dt_txt.substring(0, weather.dt_txt.indexOf("00"))}</Text>
+              </View>
               <Fontisto name={icons[weather.weather[0].main]} size={60} color="black"/>
-              <Text style={styles.date}>{weather.dt_txt.substring(0, weather.dt_txt.indexOf("00"))}</Text>
               <View style={{flexDirection: "row", alignItems: "center", justifyContent: "space-between"}}>
-                <Text style={styles.temp}>최저:{Number(weather.main.temp_min).toFixed(1)}°  최고:{Number(weather.main.temp_max).toFixed(1)}°</Text>
+                <Text style={styles?.temp}>최저:{Number(weather.main?.temp_min).toFixed(1)}°  최고:{Number(weather.main?.temp_max).toFixed(1)}°</Text>
               </View>
               <Text style={styles.description}>{weather.weather[0].main}</Text>
             </View>
@@ -88,48 +93,55 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   city: {
-    flex: 1.5,
-    justifyContent: "center",
-    alignItems: "flex-start",
-    paddingLeft: 20,
+    flex: 1,
+    justifyContent: "flex-end",
+    alignItems: "center",
   },
   cityName: {
     fontSize: 35,
-    fontWeight: 'bold',
-  },
-  title: {
-    fontSize: 20,
-    marginBottom: 50,
   },
   current: {
-    flex: 1,
-    justifyContent: "center",
-    paddingLeft: 20,
+    flex: 2,
+    justifyContent: "space-evenly",
+    alignItems: "center",
   },
   currentTitle: {
     fontSize: 30,
     fontWeight: 'bold',
   },
+  currentWeatherInfo: {
+    alignItems: "center",
+  },
   currentTemp: {
-    fontSize: 20,
+    fontSize: 35,
   },
   currentDesc: {
-    fontSize: 25,
+    fontSize: 15,
+    color: "#999"
   },
   weather: {
+    
   },
   day: {
+    flex: 0.5,
     width: SCREEN_WIDTH,
-    alignItems: "flex-start",
-    paddingLeft: 20,
+    alignItems: "center",
+    gap: 10,
   },
   temp: {
     fontSize: 20,
-    marginTop: 10,
   },
   description: {
     fontSize: 25,
-    marginTop: 10,
+  },
+  dateWrap: {
+    flexDirection: "row",
+    alignItems: "flex-end",
+    gap: 10,
+  },
+  countDate: {
+    fontSize: 30,
+    fontWeight: "bold",
   },
   date: {
     fontSize: 15,
